@@ -1,0 +1,7 @@
+[
+  {"class": "antenna", "words":["antenna", "wire", "height","coax", "ground", "pattern", "beam"]},
+  {"class": "electronics", "words":["diy","kit","qrp","meter", "scope", "solder", "pcb", "schematic"]},
+  {"class": "club", "words": ["meeting", "NFARL", "club", "board", "nfares", "arrl", "ares","fulton","atlanta", "gwinett"]},
+  {"class": "rig", "words": ["rig", "transciever", "station" ]},
+  {"class": "contest", "words": ["points", "contest", "logging", "qso", "tower", "dx"]}
+]

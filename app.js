@@ -1,12 +1,13 @@
 
 require('dotenv').config();
+const fs = require('fs');
 const Discord = require('discord.js');
 
 const client = new Discord.Client();
 
-const URLREGEX = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+const URLREGEX = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g;
 
-const URLS = [];
+const URLS = {};
 
 client.on('ready', ( )=>{
   console.log(`Logged in as: ${client.user.tag}`);
@@ -33,10 +34,18 @@ client.on('ready', ( )=>{
         urls = msg[1].content.match(URLREGEX);
 
         if(urls){
-          URLS.push(...urls);
+            
+          urls.forEach( url =>{ 
+            if( URLS[url] ){
+              URLS[url].push(msg[1].content)
+            }else{
+              URLS[url] = [msg[1].content]
+            }
+          });
         }
       }
       console.log(URLS);
+      fs.writeFileSync('./url-messages.json',JSON.stringify(URLS,null,4));
       // When complete, log out
       client.destroy();
     })
