@@ -8,6 +8,7 @@ const client = new Discord.Client();
 const URLREGEX = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g;
 
 const URLS = {};
+const MESSAGES = [];
 
 client.on('ready', ( )=>{
   console.log(`Logged in as: ${client.user.tag}`);
@@ -27,6 +28,8 @@ client.on('ready', ( )=>{
     msgMgr.fetch({limit: 100})
     .then( allMessages =>{
       // allMessages is a Collection Map 
+
+      fs.writeFileSync('./all-messages.json', JSON.stringify(allMessages.array(),null,2));
       for (const msg of allMessages) {
 
         console.log("Checking msg id:", msg[0])

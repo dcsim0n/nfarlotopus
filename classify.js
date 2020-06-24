@@ -1,6 +1,6 @@
 const natural = require('natural');
 
-const urlData = require('./url-messages.json');
+const data = require('./all-messages.json');
 
 const classDocuments = require('./clasifiers.json');
 
@@ -13,7 +13,16 @@ classDocuments.forEach( classObj =>{
 
 classifier.train();
 
-for(const msg in urlData){
-  console.log(`classifying ${urlData[msg]}`)
-  console.log(classifier.classify(...urlData[msg]))
-}
+// for(const msg in data){
+//   console.log(`classifying ${urlData[msg]}`)
+//   console.log(classifier.classify(...urlData[msg]))
+// }
+
+data.forEach((msg)=>{
+  console.log("---------------------------");
+  console.log("Classifying:");
+  console.log(msg.content);
+  console.log("-----");
+  console.log(classifier.classify(msg.content));
+  console.log("----------------------------");
+})
