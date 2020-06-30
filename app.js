@@ -7,55 +7,72 @@ const client = new Discord.Client();
 
 const URLREGEX = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g;
 
-const URLS = {};
+const POSTERS = {};
 
 client.on('ready', ( )=>{
   console.log(`Logged in as: ${client.user.tag}`);
   
   client.channels.fetch("521878912448593922")
   .then(chan =>{
-    // Creates a Collector that can filter out messages
-    // msgCollector = new Discord.MessageCollector(chan, (m)=>{
-    //   return m.createdAt >= new Date("2020/06/22 20:30 EDT") ? true : false
-    // });
-    // msgCollector.on('collect',( m ) =>{
-    //   console.log(`Found message: ${m.content}`)
-    // })
-
-    // Fetch recent messages and extract links and URLS
-    msgMgr = new Discord.MessageManager(chan)
-    msgMgr.fetch({limit: 100})
-    .then( allMessages =>{
-      // allMessages is a Collection Map 
-      for (const msg of allMessages) {
-
-        console.log("Checking msg id:", msg[0])
-
-        urls = msg[1].content.match(URLREGEX);
-
-        if(urls){
-            
-          urls.forEach( url =>{ 
-            if( URLS[url] ){
-              URLS[url].push(msg[1].content)
-            }else{
-              URLS[url] = [msg[1].content]
-            }
-          });
-        }
-      }
-      console.log(URLS);
-      fs.writeFileSync('./url-messages.json',JSON.stringify(URLS,null,4));
-      // When complete, log out
-      client.destroy();
-    })
-  })
+    //do something in the channel
+  });
 });
 
 client.on('message', (m)=>{
-  if(m.content == "!ping"){
-    m.channel.send("Pong");
-    console.log(m.channel.id);
+  const urls = m.content.match(URLREGEX);
+  if(urls){
+    if(POSTERS[m.author]){
+
+      // If the author has posted before, append
+      POSTERS[ m.author ].push([ ...urls ]);
+
+    }else{
+
+      // if first post, create new array
+      POSTERS[ m.author ] = [ ...urls ];
+
+    }
+  }
+
+  if (m.content === "!bigsignal"){
+    POSTER_NAMES = Object.keys(POSTERS);
+
+    const POSTERS_BY_POSTS = POSTER_NAMES.sort( (poster_a, poster_b)=>{
+      return POSTERS[poster_a].length - POSTERS[poster_b].length;
+    });
+
+    const top3 = POSTERS_BY_POSTS.slice(0,2).map( poster => {
+      const poster_data = {
+        name: poster,
+        num_posts: POSTERS[poster].length
+      }
+      return poster_data;
+    })
+    const response = `Top three posters today:
+${top3[0] && top3[0].name}: posted ${top3[0] && top3[0].num_posts} URLs
+${top3[1] && top3[1].name}: posted ${top3[1] && top3[1].num_posts} URLs
+${top3[2] && top3[2].name}: posted ${top3[2] && top3[2].num_posts} URLs`;
+    m.reply(response);
+  }
+
+  if (m.content === "!links"){
+    const all_urls = [];
+    for (const poster in POSTERS) {
+      all_urls.push(...POSTERS[poster])
+    }
+
+    let response = "All the URLS: \n";
+    all_urls.forEach( url =>{
+      response = response.concat(`+ ${url}\n`);
+    })
+    fs.writeFileSync('./links.json',JSON.jsonify())
+    m.reply(response);
+  }
+  
+  if (m.content === "!help"){
+    m.reply(`The NFARL discord bot, im really good at keeping track of links that are posted in the discord chat
+!bigsignal : show who has posted the top 3 highest number of links or URLS in the chat
+!links : print out a bulleted list of all the links posted recently`);
   }
 })
 
