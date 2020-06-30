@@ -65,7 +65,7 @@ ${top3[2] && top3[2].name}: posted ${top3[2] && top3[2].num_posts} URLs`;
     all_urls.forEach( url =>{
       response = response.concat(`+ ${url}\n`);
     })
-    fs.writeFileSync('./links.json',JSON.jsonify())
+    fs.writeFileSync('./links.json',JSON.stringify(all_urls,null,2))
     m.reply(response);
   }
   
