@@ -24,7 +24,7 @@ client.on('message', (m)=>{
     if(POSTERS[m.author]){
 
       // If the author has posted before, append
-      POSTERS[ m.author ].push([ ...urls ]);
+      POSTERS[ m.author ].push(...urls);
 
     }else{
 
