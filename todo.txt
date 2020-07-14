@@ -1,0 +1,2 @@
++ Ignore links posted in our own links: when responding to !links command, 
+  filter out messages from ourself when parsing links
