@@ -1,0 +1,7 @@
+# Docker ignore file
+
+node_modules/*
+.git/*
+yarn.lock
+README.md
+.gitignore
