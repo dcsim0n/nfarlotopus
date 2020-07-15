@@ -20,7 +20,8 @@ client.on('ready', ( )=>{
 
 client.on('message', (m)=>{
   const urls = m.content.match(URLREGEX);
-  if(urls){
+  // If we have urls and it's not ourself talking: ie, don't track URLS that I post
+  if(urls && (m.author === client.user.username )){
     if(POSTERS[m.author]){
 
       // If the author has posted before, append
@@ -46,8 +47,10 @@ client.on('message', (m)=>{
         name: poster,
         num_posts: POSTERS[poster].length
       }
+
       return poster_data;
     })
+
     const response = `Top three posters today:
 ${top3[0] && top3[0].name}: posted ${top3[0] && top3[0].num_posts} URLs
 ${top3[1] && top3[1].name}: posted ${top3[1] && top3[1].num_posts} URLs
