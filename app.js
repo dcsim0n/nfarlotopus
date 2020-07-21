@@ -42,7 +42,7 @@ client.on('message', (m)=>{
       return POSTERS[poster_a].length - POSTERS[poster_b].length;
     });
 
-    const top3 = POSTERS_BY_POSTS.slice(0,2).map( poster => {
+    const top3 = POSTERS_BY_POSTS.slice(0,3).map( poster => {
       const poster_data = {
         name: poster,
         num_posts: POSTERS[poster].length
