@@ -21,7 +21,8 @@ client.on('ready', ( )=>{
 client.on('message', (m)=>{
   const urls = m.content.match(URLREGEX);
   // If we have urls and it's not ourself talking: ie, don't track URLS that I post
-  if(urls && (m.author === client.user.username )){
+  if(urls && (m.author.id != client.user.id) ){
+    console.log("Received message from: ",m.author)
     if(POSTERS[m.author]){
 
       // If the author has posted before, append
