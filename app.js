@@ -40,7 +40,7 @@ client.on('message', (m)=>{
     POSTER_NAMES = Object.keys(POSTERS);
 
     const POSTERS_BY_POSTS = POSTER_NAMES.sort( (poster_a, poster_b)=>{
-      return POSTERS[poster_a].length - POSTERS[poster_b].length;
+      return  POSTERS[poster_b].length - POSTERS[poster_a].length;
     });
 
     const top3 = POSTERS_BY_POSTS.slice(0,3).map( poster => {

@@ -22,7 +22,7 @@ class LinkSquid{
   }
 
   linkCount(author){
-    let count 0
+    let count = 0;
     if(author in this._ROLLBOOK){
       count = this._ROLLBOOK[author].length
     }
@@ -42,7 +42,7 @@ class LinkSquid{
     AUTHOR_NAMES = Object.keys(this._ROLLBOOK);
 
     const AUTHORS_BY_POSTS = AUTHOR_NAMES.sort( (poster_a, poster_b)=>{
-      return this.linkCount(author_a) - this.linkCount(author_b);
+      return  POSTERS[poster_b].length - POSTERS[poster_a].length;
     });
 
     const top_authors = AUTHORS_BY_POSTS.slice(0, num_authors).map( poster => {
